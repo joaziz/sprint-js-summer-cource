@@ -1,54 +1,57 @@
-const {appendFile} = require("fs").promises
+import express, {Request, Response} from 'express';
+import {admin, customerAccountModule} from "./Routes";
+import {AuthMiddleware} from "./Http/AuthMiddleware";
+
+/**
+ * Ebanking System
+ * init the express app
+ */
+const app = express(); // express application
 
 
-let UserName: string = process.argv[2];
-let Age: number = isNaN(parseInt(process.argv[3] || "0")) ? 0 : parseInt(process.argv[3] || "0");
-let accountNO: number = parseInt(process.argv[4] || "0");
-const isAdult = (age: number): boolean => {
-    return age > 18;
+function sendEmail() {
+    setTimeout(function () {
+        console.log('mail sent')
+    }, 4000);
 }
 
-class Person {
+let controller = function (req: Request, res: Response) {
+    res.send("ok");
+    sendEmail()
+};
 
 
-    constructor(public name: string) {
+let count = 0;
 
+let rateLimit = function (req, res, next) {
+    count++;
+    if (count > 3) {
+        return res.sendStatus(403)
     }
+    return next()
 }
 
-// setTimeout(function () {
-//     v = "fdff";
-// }, 5000)
-
-let Ahmed: Person = new Person('ahmed');
-let Adel: Person = new Person('Adel');
-console.log("MR. " + Ahmed.name)
-console.log("MR. " + Adel.name)
-
-// appendFile("file.txt", `name : ${UserName} - age:  ${Age} - Bank Account ${accountNO} - ${isAdult(Age) ? 'adult' : 'kid'}`).then(console.log)
-
-
-type person = { name: string, age: number, gender: 'male' | 'female' }
-
-function getUsers(): person[] {
-    return [
-        {name: "ahmed", age: 22, gender: 'female'},
-        {name: "adel", age: 22, gender: 'female'},
-        {name: "sameh", age: 22, gender: 'female'}
-    ]
+let logMid = function (req, res, next) {
+    console.log('new request')
+    return next()
 }
+app.use(logMid)
+// app.use(rateLimit)
+
+app.get("/", controller);
+
+/**
+ * load routes
+ */
+customerAccountModule(app);
+admin(app)
+/**
+ * run the app
+ */
+const PORT = 3000
+app.listen(PORT, function () {
+    console.log(`server working on port ${PORT}`)
+})
 
 
-let genders: string[] = getUsers().map(u => u.name)
-
-console.log(genders)
-
-
-let v: any;
-
-v = 20;
-
-console.log(v)
-
-// nestjs
-// typescript Generics
+// research frameworks in Nodejs (5 framework with pros and cons)
