@@ -7,18 +7,21 @@ export function customerAccountModule(app: Application) {
     let ct = new CustomerAccountsController();
 
     const customerAccountModule = express()
+    // @ts-ignore
     customerAccountModule.get("/", ct.list);
+    // @ts-ignore
     customerAccountModule.get("/:acountno", ct.details);
+    // @ts-ignore
     customerAccountModule.get('/:acountno/transactions', ct.transactions);
 
-    app.use("/customer/account", AuthMiddleware, customerAccountModule)
+    app.use("/customer/account", AuthMiddleware("USER"), customerAccountModule)
 }
 
 export function admin(app: Application) {
     const adminApp = express()
-    adminApp.use(AuthMiddleware)
+    adminApp.use(AuthMiddleware("ADMIN"))
 
-    adminApp.get("/", AuthMiddleware, (req, res) => res.send("admin"));
+    adminApp.get("/", (req, res) => res.send("admin"));
 
     adminApp.get('/customers', function (req, res) {
         res.json([

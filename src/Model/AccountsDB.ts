@@ -7,6 +7,7 @@ export interface Transaction {
 
 export interface AccountDetails {
     accountName: string
+    user_id: number
     no: string,
     balance: number,
     currency: "USD" | "EGP",
@@ -19,6 +20,7 @@ export class AccountsDB {
         {
             accountName: "Ahmed Ali",
             no: "2345454184",
+            user_id: 1,
             balance: 23535.32,
             currency: "USD",
             type: "CURRENT",
@@ -31,6 +33,7 @@ export class AccountsDB {
             no: "874145468",
             balance: 0.0,
             currency: "USD",
+            user_id: 5,
             type: "SAVING",
             transactions: [
                 {amount: 200, date: "2020-01-01 11:30:00", details: "pay Lamp", merchant: "IKIA"}
@@ -41,6 +44,7 @@ export class AccountsDB {
             no: "325454816",
             balance: 1024548.5,
             currency: "EGP",
+            user_id: 1,
             type: "CURRENT",
             transactions: [
                 {amount: 200, date: "2020-01-01 11:30:00", details: "pay Lamp", merchant: "IKIA"}

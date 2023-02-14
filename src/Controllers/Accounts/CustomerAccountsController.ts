@@ -1,20 +1,20 @@
 import {Request, Response} from "express";
-import {AccountDetails, AccountsDB} from "../../service/accounts";
+import {AccountDetails, AccountsDB} from "../../Model";
+import {CustomerAccount, TransactionsList} from "../../service/CustomerAccount";
+import {RequestInterface} from "../../Http/RequestInterface";
+import {
+    CustomerAccountsControllerLitResponse
+} from "../../Http/JsonResponses/CustomerAccountsController/CustomerAccountsControllerLitResponse";
 
 
 export class CustomerAccountsController {
-    list(req: Request, res: Response) {
-        let Response: { accounts: AccountDetails[] } = {
-            accounts: (new AccountsDB).getCustomerAccounts().map(account => {
-                account.transactions = null;
-                return account
-            })
-        }
-        // @ts-ignore
-        res.send({...Response, name: req.user.name});
+    list(req: RequestInterface, res: Response<CustomerAccountsControllerLitResponse>) {
+        let accounts = (new CustomerAccount()).getListOfTransactions(req.user);
+
+        res.send(new CustomerAccountsControllerLitResponse(accounts, req.user.getUserInfo()));
     }
 
-    details(req: Request, res: Response) {
+    details(req: RequestInterface, res: Response) {
 
         let {acountno} = req.params;
 
@@ -29,7 +29,7 @@ export class CustomerAccountsController {
 
     }
 
-    transactions(req: Request, res: Response) {
+    transactions(req: RequestInterface, res: Response) {
 
         let {acountno} = req.params;
 

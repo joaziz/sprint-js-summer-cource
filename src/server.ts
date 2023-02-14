@@ -1,6 +1,5 @@
 import express, {Request, Response} from 'express';
 import {admin, customerAccountModule} from "./Routes";
-import {AuthMiddleware} from "./Http/AuthMiddleware";
 
 /**
  * Ebanking System
