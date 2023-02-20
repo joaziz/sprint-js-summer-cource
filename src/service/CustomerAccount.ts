@@ -1,4 +1,4 @@
-import {AccountDetails, AccountsDB, Transaction, UserModel, UserModelInterface} from "../Model";
+import {AccountsDB, UserModelInterface} from "../Model";
 
 
 export interface TransactionsList {

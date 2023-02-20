@@ -1,43 +1,43 @@
-import {Request, Response} from "express";
-import {AccountDetails, AccountsDB} from "../../Model";
-import {CustomerAccount, TransactionsList} from "../../service/CustomerAccount";
-import {RequestInterface} from "../../Http/RequestInterface";
+import {Response} from "express";
+import {AccountsDB} from "../../Model";
+import {CustomerAccount} from "../../service/CustomerAccount";
 import {
     CustomerAccountsControllerLitResponse
 } from "../../Http/JsonResponses/CustomerAccountsController/CustomerAccountsControllerLitResponse";
+import {CustomRequest} from "../../Core/Server";
+import {CustomResponse} from "../../Http/CustomResponse";
 
 
 export class CustomerAccountsController {
-    list(req: RequestInterface, res: Response<CustomerAccountsControllerLitResponse>) {
+    list(req: CustomRequest, res: Response<CustomerAccountsControllerLitResponse>) {
         let accounts = (new CustomerAccount()).getListOfTransactions(req.user);
 
-        res.send(new CustomerAccountsControllerLitResponse(accounts, req.user.getUserInfo()));
+        CustomResponse(res).json(new CustomerAccountsControllerLitResponse(accounts, req.user.getUserInfo()))
     }
 
-    details(req: RequestInterface, res: Response) {
+
+    details(req: CustomRequest, res: Response) {
 
         let {acountno} = req.params;
-
         let account = (new AccountsDB).getAccountByNo(acountno)
 
         if (account) {
             account.transactions = null;
-            return res.send(account);
+            return CustomResponse(res).json(account)
         }
-
-        return res.status(404).json({error: "account not found"})
+        return CustomResponse(res).NotFound("account not found")
 
     }
 
-    transactions(req: RequestInterface, res: Response) {
+    async transactions(req: CustomRequest, res: Response) {
 
         let {acountno} = req.params;
 
         let account = (new AccountsDB).getAccountByNo(acountno)
 
         if (!account)
-            return res.status(404).json({error: "account not found"})
+            return CustomResponse(res).NotFound("account not found")
 
-        return res.send(account.transactions);
+        return CustomResponse(res).json(account.transactions)
     }
 }

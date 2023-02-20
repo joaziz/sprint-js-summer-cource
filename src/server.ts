@@ -1,56 +1,32 @@
-import express, {Request, Response} from 'express';
-import {admin, customerAccountModule} from "./Routes";
+import {Server} from "./Core/Server";
+import {LogMiddleware} from "./Http/Middlewares/LogMiddleware";
+
+
+import {CustomerRoute, ApiRoute, AdminRoute} from "./Routes";
+import {JsonParser} from "./Http/Middlewares/JsonParser";
+import {ValidatorMiddleware} from "./Http/Middlewares/ValidatorMiddleware";
+
 
 /**
- * Ebanking System
- * init the express app
+ * init the server application
  */
-const app = express(); // express application
-
-
-function sendEmail() {
-    setTimeout(function () {
-        console.log('mail sent')
-    }, 4000);
-}
-
-let controller = function (req: Request, res: Response) {
-    res.send("ok");
-    sendEmail()
-};
-
-
-let count = 0;
-
-let rateLimit = function (req, res, next) {
-    count++;
-    if (count > 3) {
-        return res.sendStatus(403)
-    }
-    return next()
-}
-
-let logMid = function (req, res, next) {
-    console.log('new request')
-    return next()
-}
-app.use(logMid)
-// app.use(rateLimit)
-
-app.get("/", controller);
+let server = new Server();
 
 /**
- * load routes
+ * load middlewares and related checks
  */
-customerAccountModule(app);
-admin(app)
+server.AddMiddleware(new JsonParser())
+server.AddMiddleware(new ValidatorMiddleware())
+server.AddMiddleware(new LogMiddleware())
+
 /**
- * run the app
+ * Inject routes
  */
-const PORT = 3000
-app.listen(PORT, function () {
-    console.log(`server working on port ${PORT}`)
-})
+server.LoadRout(new ApiRoute())
+server.LoadRout(new AdminRoute())
+server.LoadRout(new CustomerRoute())
+/**
+ * Run the Application
+ */
+server.Start(3000)
 
-
-// research frameworks in Nodejs (5 framework with pros and cons)
