@@ -9,17 +9,16 @@ import {CustomResponse} from "../../Http/CustomResponse";
 
 
 export class CustomerAccountsController {
-    list(req: CustomRequest, res: Response<CustomerAccountsControllerLitResponse>) {
-        let accounts = (new CustomerAccount()).getListOfTransactions(req.user);
-
+    async list(req: CustomRequest, res: Response<CustomerAccountsControllerLitResponse>) {
+        let accounts = await(new CustomerAccount()).getListOfTransactions(req.user);
         CustomResponse(res).json(new CustomerAccountsControllerLitResponse(accounts, req.user.getUserInfo()))
     }
 
 
-    details(req: CustomRequest, res: Response) {
+  async  details(req: CustomRequest, res: Response) {
 
         let {acountno} = req.params;
-        let account = (new AccountsDB).getAccountByNo(acountno)
+        let account = await (new AccountsDB).getAccountByNo(acountno)
 
         if (account) {
             account.transactions = null;
@@ -33,7 +32,7 @@ export class CustomerAccountsController {
 
         let {acountno} = req.params;
 
-        let account = (new AccountsDB).getAccountByNo(acountno)
+        let account = await (new AccountsDB).getAccountByNo(acountno)
 
         if (!account)
             return CustomResponse(res).NotFound("account not found")

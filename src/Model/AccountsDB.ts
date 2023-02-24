@@ -1,3 +1,5 @@
+import {Collection} from "./DataSource/MongoSource";
+
 export interface Transaction {
     merchant: string,
     amount: number,
@@ -5,7 +7,8 @@ export interface Transaction {
     details: string
 }
 
-export interface AccountDetails {
+export interface AccountDetails extends Document {
+    // _id:Obje
     accountName: string
     user_id: number
     no: string,
@@ -16,48 +19,17 @@ export interface AccountDetails {
 }
 
 export class AccountsDB {
-    private Accounts: AccountDetails[] = [
-        {
-            accountName: "Ahmed Ali",
-            no: "2345454184",
-            user_id: 1,
-            balance: 23535.32,
-            currency: "USD",
-            type: "CURRENT",
-            transactions: [
-                {amount: 200, date: "2020-01-01 11:30:00", details: "pay Lamp", merchant: "IKIA"}
-            ]
-        },
-        {
-            accountName: "Ahmed Ali",
-            no: "874145468",
-            balance: 0.0,
-            currency: "USD",
-            user_id: 5,
-            type: "SAVING",
-            transactions: [
-                {amount: 200, date: "2020-01-01 11:30:00", details: "pay Lamp", merchant: "IKIA"}
-            ]
-        },
-        {
-            accountName: "Ahmed Ali",
-            no: "325454816",
-            balance: 1024548.5,
-            currency: "EGP",
-            user_id: 1,
-            type: "CURRENT",
-            transactions: [
-                {amount: 200, date: "2020-01-01 11:30:00", details: "pay Lamp", merchant: "IKIA"}
-            ]
-        }
-    ];
+    private Accounts: AccountDetails[] = [];
+    private CollectionName: string = "Accounts";
 
-    getCustomerAccounts(): AccountDetails[] {
-        return this.Accounts
+    async getCustomerAccounts(userId: number): Promise<AccountDetails[]> {
+
+        return await (await Collection<AccountDetails>(this.CollectionName)).find({user_id: userId}).toArray();
+
     }
 
-    getAccountByNo(accountNo: string): AccountDetails | null {
-        let accounts: AccountDetails[] = this.Accounts.filter(account => account.no === accountNo)
+    async getAccountByNo(accountNo: string): Promise<AccountDetails | null> {
+        let accounts = await (await Collection<AccountDetails>(this.CollectionName)).find({no: accountNo}).toArray()
         if (accounts.length > 0)
             return accounts[0];
         return null;

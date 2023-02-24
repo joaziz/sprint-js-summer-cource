@@ -1,0 +1,76 @@
+[
+  {
+    "_id": {"$oid": "63f8f26b9608f763ab2e15cf"},
+    "accountName": "Ahmed Ali",
+    "balance": 0,
+    "currency": "USD",
+    "no": "874145468",
+    "transactions": [
+      {
+        "amount": 200,
+        "date": "2020-01-01 11:30:00",
+        "details": "pay Lamp",
+        "merchant": "IKIA"
+      }
+    ],
+    "type": "SAVING",
+    "user_id": 5
+  },
+  {
+    "_id": {"$oid": "63f8f26b9608f763ab2e15ce"},
+    "accountName": "Ahmed Ali",
+    "balance": 23535.32,
+    "currency": "USD",
+    "no": "2345454184",
+    "transactions": [
+      {
+        "amount": 200,
+        "date": "2020-01-01 11:30:00",
+        "details": "pay Lamp",
+        "merchant": "IKIA"
+      }
+    ],
+    "type": "CURRENT",
+    "user_id": 1
+  },
+  {
+    "_id": {"$oid": "63f8f26b9608f763ab2e15d0"},
+    "accountName": "Ahmed Ali",
+    "balance": 1024548.5,
+    "currency": "EGP",
+    "no": "325454816",
+    "transactions": [
+      {
+        "amount": 200,
+        "date": "2020-01-01 11:30:00",
+        "details": "pay Lamp",
+        "merchant": "IKIA"
+      },
+      {
+        "amount": 200,
+        "date": "2020-01-01 11:30:00",
+        "details": "pay Lamp",
+        "merchant": "MacDonalds"
+      }
+    ],
+    "type": "CURRENT",
+    "user_id": 1
+  },
+  {
+    "_id": {"$oid": "63f8f742b51614380517b6d5"},
+    "accountName": "Ahmed Ali",
+    "balance": 25454.31,
+    "currency": "EGP",
+    "no": "13524132",
+    "transactions": [
+      {
+        "amount": 200,
+        "date": "2020-01-01 11:30:00",
+        "details": "pay Lamp",
+        "merchant": "IKIA"
+      }
+    ],
+    "type": "SAVING",
+    "user_id": 1
+  }
+]

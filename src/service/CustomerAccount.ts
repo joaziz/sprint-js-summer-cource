@@ -10,8 +10,8 @@ export interface TransactionsList {
 }
 
 export class CustomerAccount {
-    getListOfTransactions(user: UserModelInterface): TransactionsList[] {
-        return (new AccountsDB).getCustomerAccounts().filter(current => current.user_id === user.id).map(account => {
+    async getListOfTransactions(user: UserModelInterface): Promise<TransactionsList[]> {
+        return (await (new AccountsDB).getCustomerAccounts(user.id)).map(account => {
             account.transactions = null;
             return account
         })
